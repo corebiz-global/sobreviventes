@@ -26,7 +26,7 @@ module.exports = {
       code: 'BRL',
       symbol: 'R$',
     },
-    locale: 'pt-BR',
+    locale: 'en-US',
     channel: '{"salesChannel":"1","regionId":""}',
     country: 'BR',
     postalCode: null,
@@ -34,11 +34,11 @@ module.exports = {
   },
 
   // Production URLs
-  storeUrl: 'https://vtexfaststore.com',
-  secureSubdomain: 'https://secure.vtexfaststore.com',
-  checkoutUrl: 'https://secure.vtexfaststore.com/checkout',
-  loginUrl: 'https://secure.vtexfaststore.com/api/io/login',
-  accountUrl: 'https://secure.vtexfaststore.com/api/io/account',
+  storeUrl: 'https://sobreviventes.vercel.app/',
+  secureSubdomain: 'https://corelabiz.myvtex.com',
+  checkoutUrl: 'https://corelabiz.myvtex.com/checkout',
+  loginUrl: 'https://corelabiz.myvtex.com/api/io/login',
+  accountUrl: 'https://corelabiz.myvtex.com/api/io/account',
 
   // Lighthouse CI
   lighthouse: {
