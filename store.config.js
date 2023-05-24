@@ -23,13 +23,12 @@ module.exports = {
   // Default session
   session: {
     currency: {
-      code: 'BRL',
-      symbol: 'R$',
+      code: 'USD',
+      symbol: '$',
     },
     locale: 'en-US',
     channel: '{"salesChannel":"1","regionId":""}',
-    country: 'BR',
-    geoCoordinates: '',
+    country: 'USA',
     postalCode: null,
     person: null,
   },

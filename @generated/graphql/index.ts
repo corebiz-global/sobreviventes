@@ -16,69 +16,10 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
-  /**
-   * Example:
-   *
-   * ```json
-   * {
-   *   Color: 'Red', Size: '42'
-   * }
-   * ```
-   */
   ActiveVariations: any
-  /**
-   * Example:
-   *
-   * ```json
-   * {
-   *   Color: [
-   *     {
-   *       src: "https://storecomponents.vtexassets.com/...",
-   *       alt: "...",
-   *       label: "...",
-   *       value: "..."
-   *     },
-   *     {
-   *       src: "https://storecomponents.vtexassets.com/...",
-   *       alt: "...",
-   *       label: "...",
-   *       value: "..."
-   *     }
-   *   ],
-   *   Size: [
-   *     {
-   *       src: "https://storecomponents.vtexassets.com/...",
-   *       alt: "...",
-   *       label: "...",
-   *       value: "..."
-   *     }
-   *   ]
-   * }
-   * ```
-   */
   FormattedVariants: any
-  /** A string or the string representation of an object (a stringified object). */
   ObjectOrString: any
-  /**
-   * Example:
-   *
-   * ```json
-   * {
-   *   'Color-Red-Size-40': 'classic-shoes-37'
-   * }
-   * ```
-   */
   SlugsMap: any
-  /**
-   * Example:
-   *
-   * ```json
-   * {
-   *   Color: [ "Red", "Blue", "Green" ],
-   *   Size: [ "40", "41" ]
-   * }
-   * ```
-   */
   VariantsByName: any
 }
 
@@ -104,6 +45,19 @@ export type Address = {
   state: Maybe<Scalars['String']>
   /** Address street */
   street: Maybe<Scalars['String']>
+}
+
+export type AvailableDeliveryWindows = {
+  /** Available delivery window end date in UTC */
+  endDateUtc: Maybe<Scalars['String']>
+  /** Available delivery window list price */
+  listPrice: Maybe<Scalars['Int']>
+  /** Available delivery window price */
+  price: Maybe<Scalars['Int']>
+  /** Available delivery window start date in UTC */
+  startDateUtc: Maybe<Scalars['String']>
+  /** Available delivery window tax */
+  tax: Maybe<Scalars['Int']>
 }
 
 export type DeliveryIds = {
@@ -139,7 +93,7 @@ export type IShippingItem = {
 
 /** Shopping cart input. */
 export type IStoreCart = {
-  /** Order information, including `orderNumber` and `acceptedOffer`. */
+  /** Order information, including `orderNumber`, `acceptedOffer` and `shouldSplitItem`. */
   order: IStoreOrder
 }
 
@@ -148,6 +102,30 @@ export type IStoreCurrency = {
   code: Scalars['String']
   /** Currency symbol (e.g: $). */
   symbol: Scalars['String']
+}
+
+export type IStoreDeliveryMode = {
+  /** The delivery channel information of the session. */
+  deliveryChannel: Scalars['String']
+  /** The delivery method information of the session. */
+  deliveryMethod: Scalars['String']
+  /** The delivery window information of the session. */
+  deliveryWindow: InputMaybe<IStoreDeliveryWindow>
+}
+
+/** Delivery window information. */
+export type IStoreDeliveryWindow = {
+  /** The delivery window end date information. */
+  endDate: Scalars['String']
+  /** The delivery window start date information. */
+  startDate: Scalars['String']
+}
+
+export type IStoreGeoCoordinates = {
+  /** The latitude of the geographic coordinates. */
+  latitude: Scalars['Float']
+  /** The longitude of the geographic coordinates. */
+  longitude: Scalars['Float']
 }
 
 /** Image input. */
@@ -178,6 +156,8 @@ export type IStoreOrder = {
   acceptedOffer: Array<IStoreOffer>
   /** ID of the order in [VTEX order management](https://help.vtex.com/en/tutorial/license-manager-resources-oms--60QcBsvWeum02cFi3GjBzg#). */
   orderNumber: Scalars['String']
+  /** Indicates whether or not items with attachments should be split. */
+  shouldSplitItem: InputMaybe<Scalars['Boolean']>
 }
 
 /** Organization input. */
@@ -231,15 +211,21 @@ export type IStoreSelectedFacet = {
 
 /** Session input. */
 export type IStoreSession = {
+  /** Session input address type. */
+  addressType: InputMaybe<Scalars['String']>
   /** Session input channel. */
   channel: InputMaybe<Scalars['String']>
   /** Session input country. */
   country: Scalars['String']
   /** Session input currency. */
   currency: IStoreCurrency
+  /** Session input delivery mode. */
+  deliveryMode: InputMaybe<IStoreDeliveryMode>
+  /** Session input geoCoordinates. */
+  geoCoordinates: InputMaybe<IStoreGeoCoordinates>
   /** Session input locale. */
   locale: Scalars['String']
-  /** Session input postal code. */
+  /** Session input person. */
   person: InputMaybe<IStorePerson>
   /** Session input postal code. */
   postalCode: InputMaybe<Scalars['String']>
@@ -444,6 +430,8 @@ export type ShippingData = {
 }
 
 export type ShippingSla = {
+  /** ShippingSLA available delivery windows. */
+  availableDeliveryWindows: Maybe<Array<Maybe<AvailableDeliveryWindows>>>
   /** ShippingSLA carrier. */
   carrier: Maybe<Scalars['String']>
   /** ShippingSLA delivery channel. */
@@ -485,22 +473,26 @@ export type SkuVariants = {
    * `dominantVariantName` property. Returns all available options for the
    * dominant property, and only options that can be combined with its current
    * value for other properties.
+   * If `dominantVariantName` is not present, the first variant will be
+   * considered the dominant one.
    */
   availableVariations: Maybe<Scalars['FormattedVariants']>
   /**
    * Maps property value combinations to their respective SKU's slug. Enables
    * us to retrieve the slug for the SKU that matches the currently selected
    * variations in O(1) time.
+   * If `dominantVariantName` is not present, the first variant will be
+   * considered the dominant one.
    */
   slugsMap: Maybe<Scalars['SlugsMap']>
 }
 
 export type SkuVariantsAvailableVariationsArgs = {
-  dominantVariantName: Scalars['String']
+  dominantVariantName: InputMaybe<Scalars['String']>
 }
 
 export type SkuVariantsSlugsMapArgs = {
-  dominantVariantName: Scalars['String']
+  dominantVariantName: InputMaybe<Scalars['String']>
 }
 
 /** Aggregate offer information, for a given SKU that is available to be fulfilled by multiple sellers. */
@@ -630,6 +622,24 @@ export type StoreCurrency = {
   symbol: Scalars['String']
 }
 
+/** Delivery mode information. */
+export type StoreDeliveryMode = {
+  /** The delivery channel information of the session. */
+  deliveryChannel: Scalars['String']
+  /** The delivery method information of the session. */
+  deliveryMethod: Scalars['String']
+  /** The delivery window information of the session. */
+  deliveryWindow: Maybe<StoreDeliveryWindow>
+}
+
+/** Delivery window information. */
+export type StoreDeliveryWindow = {
+  /** The delivery window end date information. */
+  endDate: Scalars['String']
+  /** The delivery window start date information. */
+  startDate: Scalars['String']
+}
+
 export type StoreFacet = StoreFacetBoolean | StoreFacetRange
 
 /** Search facet boolean information. */
@@ -679,6 +689,14 @@ export type StoreFacetValueRange = {
   absolute: Scalars['Float']
   /** Search facet range selected value. */
   selected: Scalars['Float']
+}
+
+/** Geographic coordinates information. */
+export type StoreGeoCoordinates = {
+  /** The latitude of the geographic coordinates. */
+  latitude: Scalars['Float']
+  /** The longitude of the geographic coordinates. */
+  longitude: Scalars['Float']
 }
 
 /** Image. */
@@ -887,15 +905,21 @@ export type StoreSeo = {
 
 /** Session information. */
 export type StoreSession = {
+  /** Session address type. */
+  addressType: Maybe<Scalars['String']>
   /** Session channel. */
   channel: Maybe<Scalars['String']>
   /** Session country. */
   country: Scalars['String']
   /** Session currency. */
   currency: StoreCurrency
+  /** Session delivery mode. */
+  deliveryMode: Maybe<StoreDeliveryMode>
+  /** Session input geoCoordinates. */
+  geoCoordinates: Maybe<StoreGeoCoordinates>
   /** Session locale. */
   locale: Scalars['String']
-  /** Session postal code. */
+  /** Session input person. */
   person: Maybe<StorePerson>
   /** Session postal code. */
   postalCode: Maybe<Scalars['String']>
