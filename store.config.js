@@ -29,6 +29,7 @@ module.exports = {
     locale: 'en-US',
     channel: '{"salesChannel":"1","regionId":""}',
     country: 'BR',
+    geoCoordinates: '',
     postalCode: null,
     person: null,
   },

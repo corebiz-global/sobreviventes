@@ -1,7 +1,7 @@
 import { NextSeo, SiteLinksSearchBoxJsonLd } from 'next-seo'
 import type { ComponentType } from 'react'
-import type { GetStaticProps } from 'next'
-import type { Locator } from '@vtex/client-cms'
+// import type { GetStaticProps } from 'next'
+// import type { Locator } from '@vtex/client-cms'
 
 import RenderPageSections from 'src/components/cms/RenderPageSections'
 import BannerText from 'src/components/sections/BannerText'
@@ -11,7 +11,7 @@ import Newsletter from 'src/components/sections/Newsletter'
 import ProductShelf from 'src/components/sections/ProductShelf'
 import ProductTiles from 'src/components/sections/ProductTiles'
 import { mark } from 'src/sdk/tests/mark'
-import { getPage } from 'src/server/cms'
+// import { getPage } from 'src/server/cms'
 import type { PageContentType } from 'src/server/cms'
 import CUSTOM_SECTIONS from 'src/customizations'
 
@@ -33,20 +33,21 @@ const COMPONENTS: Record<string, ComponentType<any>> = {
 
 type Props = PageContentType
 
-function Page({ sections, settings }: Props) {
+function Page({ sections }: Props) {
   return (
     <>
       {/* SEO */}
       <NextSeo
-        title={settings.seo.title}
-        description={settings.seo.description}
+        title={/* settings.seo.title */ storeConfig.seo.title}
+        description={/* settings.seo.description */ storeConfig.seo.description}
         titleTemplate={storeConfig.seo.titleTemplate}
-        canonical={settings.seo.canonical ?? storeConfig.storeUrl}
+        canonical={/* settings.seo.canonical ?? */ storeConfig.storeUrl}
         openGraph={{
           type: 'website',
           url: storeConfig.storeUrl,
-          title: settings.seo.title,
-          description: settings.seo.description,
+          title: /* settings.seo.title */ storeConfig.seo.title,
+          description:
+            /* settings.seo.description */ storeConfig.seo.description,
         }}
       />
       <SiteLinksSearchBoxJsonLd
@@ -75,22 +76,22 @@ function Page({ sections, settings }: Props) {
   )
 }
 
-export const getStaticProps: GetStaticProps<
-  Props,
-  Record<string, string>,
-  Locator
-> = async (context) => {
-  const page = await getPage<PageContentType>({
-    ...(context.previewData?.contentType === 'page'
-      ? context.previewData
-      : { filters: { 'settings.seo.slug': '/' } }),
-    contentType: 'page',
-  })
+// export const getStaticProps: GetStaticProps<
+//   Props,
+//   Record<string, string>,
+//   Locator
+// > = async (context) => {
+//   const page = await getPage<PageContentType>({
+//     ...(context.previewData?.contentType === 'page'
+//       ? context.previewData
+//       : { filters: { 'settings.seo.slug': '/' } }),
+//     contentType: 'page',
+//   })
 
-  return {
-    props: page,
-  }
-}
+//   return {
+//     props: page,
+//   }
+// }
 
 Page.displayName = 'Page'
 export default mark(Page)
